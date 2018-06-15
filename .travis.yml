@@ -1,0 +1,44 @@
+language: bash
+
+sudo: required
+
+services:
+  - docker
+
+env:
+  - SS_VERSION=3.1.3
+
+before_install:
+  - export DOCKER_COMPOSE_VERSION=1.17.1
+  - sudo rm /usr/local/bin/docker-compose
+  - curl -L https://github.com/docker/compose/releases/download/${DOCKER_COMPOSE_VERSION}/docker-compose-`uname -s`-`uname -m` > docker-compose
+  - chmod +x docker-compose
+  - sudo mv docker-compose /usr/local/bin
+
+before_script:
+  - pwd
+  - docker version
+  - docker info
+  - docker-compose version
+
+before_script:
+  - env | sort
+  - cd "$VERSION"
+  - image="xutongle/docker-ubnt-mips-ss:${SS_VERSION}"
+
+script:
+  - travis_retry docker build -t "$image" .
+
+before_deploy:
+  - travis_retry docker run --rm -it -v $TRAVIS_BUILD_DIR:/ss -e ver=${SS_VERSION} "$image" update
+  - travis_retry tar -vczf shadowsocks-libev-${SS_VERSION}.tar.gz $TRAVIS_BUILD_DIR/shadowsocks-libev/bin/
+
+deploy:
+  provider: releases
+  api_key: "${GITHUB_API_TOKEN}"
+  file_glob: true
+  file: $TRAVIS_BUILD_DIR/shadowsocks-libev/bin/*
+  skip_cleanup: true
+  on:
+    tags: true
+# vim:set et ts=2 sw=2:
