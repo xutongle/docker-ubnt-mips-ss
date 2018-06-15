@@ -1,4 +1,4 @@
-FROM xutongle/docker-ubnt-mips
+FROM xutl/docker-ubnt-mips
 
 MAINTAINER XUTONGLE <xutongle@gmail.com>
 
