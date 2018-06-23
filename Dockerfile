@@ -7,7 +7,7 @@ WORKDIR /app
 COPY ss-build.sh /bin
 
 RUN chmod 700 /bin/ss-build.sh \
-   && ver=3.1.3 \
+   && ver=3.2.0 \
    && git clone https://github.com/shadowsocks/shadowsocks-libev \
    && /bin/ss-build.sh update
 
