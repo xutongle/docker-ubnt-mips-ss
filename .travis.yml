@@ -6,7 +6,7 @@ services:
   - docker
 
 env:
-  - SS_VERSION=3.2.0
+  - SS_VERSION=3.2.1
 
 before_install:
   - export DOCKER_COMPOSE_VERSION=1.17.1
